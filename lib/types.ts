@@ -18,6 +18,7 @@ export type Fighter = {
   reach: number;
   stance: string;
   rank: number;
+  source?: string;
 };
 
 export type EventItem = {
@@ -28,6 +29,8 @@ export type EventItem = {
   date: string;
   city: string;
   status: 'LIVE' | 'UPCOMING' | 'FINAL';
+  source?: string;
+  sourceUrl?: string;
 };
 
 export type Fight = {
@@ -40,6 +43,7 @@ export type Fight = {
   method: string | null;
   round: string | null;
   sport: Sport;
+  source?: string;
 };
 
 export type NewsItem = {
@@ -67,5 +71,8 @@ export type DashboardData = {
   fights: Fight[];
   rankings: RankingRow[];
   news: NewsItem[];
-  promos: Array<{ id: number; name: string; sport: Sport; country: string }>
+  promos: Array<{ id: number; name: string; sport: Sport; country: string }>;
+  updatedAt: string;
+  sources: string[];
+  errors: string[];
 };

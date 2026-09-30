@@ -1,22 +1,12 @@
-import { getDashboardData } from '@/lib/real-data';
+import { getDashboardData } from '@/lib/api';
 import { NextResponse } from 'next/server';
 
-export const revalidate = 30; // Revalidate every 30 seconds for live updates
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const data = await getDashboardData();
-    return NextResponse.json(data, {
-      headers: {
-        'Cache-Control': 'public, s-maxage=30, stale-while-revalidate=60',
-        'Content-Type': 'application/json'
-      }
-    });
+    return NextResponse.json(await getDashboardData(), { headers: { 'Cache-Control': 'no-store' } });
   } catch (error) {
-    console.error('API Error:', error);
-    return NextResponse.json(
-      { error: 'Failed to load combat sports data' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Live providers are temporarily unavailable. Please retry.' }, { status: 503 });
   }
 }
