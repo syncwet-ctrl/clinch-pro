@@ -5,9 +5,10 @@ type PageType = 'home' | 'live' | 'schedule' | 'results' | 'rankings' | 'news';
 interface HeaderProps {
   page: PageType;
   setPage: (page: PageType) => void;
+  lastUpdated: Date;
 }
 
-export default function Header({ page, setPage }: HeaderProps) {
+export default function Header({ page, setPage, lastUpdated }: HeaderProps) {
   const navItems: Array<[PageType, string]> = [
     ['home', 'Home'],
     ['live', 'Live'],
@@ -16,6 +17,12 @@ export default function Header({ page, setPage }: HeaderProps) {
     ['rankings', 'Rankings'],
     ['news', 'News']
   ];
+
+  const updateTime = lastUpdated.toLocaleTimeString('en-US', { 
+    hour: 'numeric', 
+    minute: '2-digit',
+    second: '2-digit'
+  });
 
   return (
     <header className="topbar">
@@ -35,9 +42,8 @@ export default function Header({ page, setPage }: HeaderProps) {
           ))}
         </nav>
         <div className="header-actions">
-          <button className="icon-btn" aria-label="Search">
-            ⌕
-          </button>
+          <div className="update-badge">Updated {updateTime}</div>
+          <button className="icon-btn" aria-label="Search">🔍</button>
           <button className="icon-btn" aria-label="Theme">◐</button>
         </div>
       </div>

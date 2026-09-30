@@ -19,14 +19,19 @@ export function Dashboard() {
   const [sport, setSport] = useState<string>('all');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await fetch('/api/data', { cache: 'no-store' });
-        if (!res.ok) throw new Error('Failed to fetch data');
+        const res = await fetch('/api/data', { 
+          cache: 'no-store',
+          headers: { 'Accept': 'application/json' }
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const json = await res.json();
         setData(json);
+        setLastUpdated(new Date());
         setError(null);
       } catch (err) {
         console.error('Data fetch error:', err);
@@ -37,30 +42,32 @@ export function Dashboard() {
     }
 
     fetchData();
-    // Refresh every 30 seconds
+    // Refresh every 30 seconds for live updates
     const interval = setInterval(fetchData, 30000);
     return () => clearInterval(interval);
   }, []);
 
   if (loading && !data) {
     return (
-      <div style={{ padding: '40px', textAlign: 'center', color: 'var(--muted)' }}>
-        <p>Loading combat sports data...</p>
+      <div style={{ padding: '40px', textAlign: 'center', color: 'var(--muted)', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+        <h2 style={{ margin: '0 0 10px', fontSize: '18px' }}>Loading live combat sports data...</h2>
+        <p style={{ margin: '0', fontSize: '13px' }}>Pulling from ESPN, BBC, WWE, Olympics & more</p>
       </div>
     );
   }
 
   if (!data) {
     return (
-      <div style={{ padding: '40px', textAlign: 'center', color: 'var(--red)' }}>
-        <p>Failed to load data. Please refresh.</p>
+      <div style={{ padding: '40px', textAlign: 'center', color: 'var(--red)', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+        <h2 style={{ margin: '0 0 10px', fontSize: '18px' }}>Error loading data</h2>
+        <p style={{ margin: '0', fontSize: '13px' }}>{error}</p>
       </div>
     );
   }
 
   return (
     <>
-      <Header page={page} setPage={setPage} />
+      <Header page={page} setPage={setPage} lastUpdated={lastUpdated} />
       <div className="page">
         <Sidebar sport={sport} setSport={setSport} setPage={setPage} />
         <main className="main" tabIndex={-1}>
