@@ -23,20 +23,18 @@ export default function HomePage({ data, sport }: HomePageProps) {
   return (
     <div className="grid-2">
       <div>
-        <section className="section">
-          <div className="section-head">
-            <h2>Live now</h2>
-          </div>
-          <div className="card">
-            {liveFights.length ? (
-              liveFights.map((fight) => (
+        {liveFights.length > 0 && (
+          <section className="section">
+            <div className="section-head">
+              <h2>🔴 Live now</h2>
+            </div>
+            <div className="card">
+              {liveFights.map((fight) => (
                 <FightCard key={fight.id} fight={fight} data={data} />
-              ))
-            ) : (
-              <div className="empty">No fights live right now.</div>
-            )}
-          </div>
-        </section>
+              ))}
+            </div>
+          </section>
+        )}
 
         <section className="section">
           <div className="section-head">
@@ -45,15 +43,17 @@ export default function HomePage({ data, sport }: HomePageProps) {
               View all ›
             </a>
           </div>
-          <div className="mini-grid">
-            {upcomingEvents.length ? (
-              upcomingEvents.map((event) => (
+          {upcomingEvents.length > 0 ? (
+            <div className="mini-grid">
+              {upcomingEvents.map((event) => (
                 <EventCard key={event.id} event={event} data={data} />
-              ))
-            ) : (
+              ))}
+            </div>
+          ) : (
+            <div className="card card-pad">
               <div className="empty">No upcoming events.</div>
-            )}
-          </div>
+            </div>
+          )}
         </section>
 
         <section className="section">
@@ -64,7 +64,7 @@ export default function HomePage({ data, sport }: HomePageProps) {
             </a>
           </div>
           <div className="card">
-            {latestResults.length ? (
+            {latestResults.length > 0 ? (
               latestResults.map((fight) => (
                 <FightCard key={fight.id} fight={fight} data={data} />
               ))
@@ -91,12 +91,12 @@ export default function HomePage({ data, sport }: HomePageProps) {
             </a>
           </div>
           <div className="card">
-            {trendingNews.length ? (
+            {trendingNews.length > 0 ? (
               trendingNews.map((news, i) => (
                 <NewsCard key={i} news={news} />
               ))
             ) : (
-              <div className="empty">No news available.</div>
+              <div className="empty">No news available yet.</div>
             )}
           </div>
         </section>

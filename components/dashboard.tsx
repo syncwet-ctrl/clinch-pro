@@ -23,22 +23,22 @@ export function Dashboard() {
   useEffect(() => {
     async function fetchData() {
       try {
-        setLoading(true);
-        const res = await fetch('/api/data');
+        const res = await fetch('/api/data', { cache: 'no-store' });
         if (!res.ok) throw new Error('Failed to fetch data');
         const json = await res.json();
         setData(json);
         setError(null);
       } catch (err) {
-        setError((err as Error).message || 'Failed to load data');
         console.error('Data fetch error:', err);
+        setError((err as Error).message || 'Failed to load data');
       } finally {
         setLoading(false);
       }
     }
 
     fetchData();
-    const interval = setInterval(fetchData, 60000);
+    // Refresh every 30 seconds
+    const interval = setInterval(fetchData, 30000);
     return () => clearInterval(interval);
   }, []);
 
@@ -50,15 +50,13 @@ export function Dashboard() {
     );
   }
 
-  if (error && !data) {
+  if (!data) {
     return (
       <div style={{ padding: '40px', textAlign: 'center', color: 'var(--red)' }}>
-        <p>{error}</p>
+        <p>Failed to load data. Please refresh.</p>
       </div>
     );
   }
-
-  if (!data) return null;
 
   return (
     <>
