@@ -67,5 +67,5 @@ export type DashboardData = {
   fights: Fight[];
   rankings: RankingRow[];
   news: NewsItem[];
-  promos: Array<{ id: number; name: string; sport: Sport; country: string; }>
+  promos: Array<{ id: number; name: string; sport: Sport; country: string }>
 };

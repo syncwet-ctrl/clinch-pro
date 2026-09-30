@@ -1,7 +1,5 @@
 import { Dashboard } from '@/components/dashboard';
-import { getDashboardData } from '@/lib/dashboard';
 
-export default async function HomePage() {
-  const data = await getDashboardData();
-  return <Dashboard data={data} />;
+export default function Home() {
+  return <Dashboard />;
 }
